@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-site-verification" content="hl0GSnlA-AbX8FKCJo2F_p-VeqWiJW-lkBLu5KlSE5I" />
+    <title>MAPMATES | Real-time Social Map</title>
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#2563eb" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="MapMates" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="MapMates" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Prevent infinite reload loops
+      const RELOAD_KEY = 'mapmates_reload_count';
+      const lastReload = parseInt(sessionStorage.getItem(RELOAD_KEY) || '0');
+      
+      // Reset count after 30 seconds of stability
+      setTimeout(() => {
+        sessionStorage.removeItem(RELOAD_KEY);
+      }, 30000);
+
+      // Service Worker Fail-safe
+      /* 
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then(reg => console.log('SW registered!', reg))
+            .catch(err => {
+              console.log('SW registration failed!', err);
+              // Unregister all service workers if registration fails
+              navigator.serviceWorker.getRegistrations().then(registrations => {
+                for (let registration of registrations) {
+                  registration.unregister();
+                }
+              });
+            });
+        });
+      }
+      */
+
+      // Force unregister existing service workers to be safe
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          for (let registration of registrations) {
+            registration.unregister();
+          }
+        });
+      }
+
+      // Main Bundle Load Fail-safe
+      window.addEventListener('error', (e) => {
+        // Detect script load errors for the main entry point
+        const isMainScript = (e.target && e.target.tagName === 'SCRIPT' && (e.target.src.includes('main') || e.target.src.includes('index')));
+        
+        if (isMainScript) {
+          console.error('Main bundle failed to load. Clearing SW and reloading...');
+          
+          if (lastReload < 3) {
+            sessionStorage.setItem(RELOAD_KEY, (lastReload + 1).toString());
+            
+            if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.getRegistrations().then(registrations => {
+                for (let registration of registrations) {
+                  registration.unregister();
+                }
+                // Small delay before reload to avoid thrashing
+                setTimeout(() => window.location.reload(), 1000);
+              });
+            } else {
+              setTimeout(() => window.location.reload(), 1000);
+            }
+          } else {
+            console.error('Critical: Main bundle failed to load after multiple attempts.');
+            document.body.innerHTML = `
+              <div style="padding: 40px; font-family: -apple-system, system-ui, sans-serif; text-align: center; color: #1f2937;">
+                <h1 style="font-size: 24px; font-weight: 800; margin-bottom: 16px;">MapMates failed to start</h1>
+                <p style="margin-bottom: 24px; color: #4b5563;">We encountered a technical issue while loading the application bundle. Please try refreshing manually.</p>
+                <button onclick="sessionStorage.removeItem('${RELOAD_KEY}'); location.reload();" 
+                        style="padding: 12px 24px; background: #2563eb; color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">
+                  Refresh Page
+                </button>
+              </div>
+            `;
+          }
+        }
+      }, true);
+    </script>
+  </body>
+</html>
+

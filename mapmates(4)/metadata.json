@@ -1,0 +1,10 @@
+{
+  "name": "MapMates",
+  "description": "A real-time proximity-based social mapping app for connecting with mates and discovering nearby Vibes.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ],
+  "majorCapabilities": []
+}

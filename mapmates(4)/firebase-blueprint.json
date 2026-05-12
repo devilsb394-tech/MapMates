@@ -1,0 +1,558 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the MAPMATES platform.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "username": { "type": "string", "description": "Unique username" },
+        "email": { "type": "string", "description": "User email" },
+        "photoURL": { "type": "string", "description": "Profile picture URL" },
+        "bio": { "type": "string", "description": "User biography" },
+        "gender": { "type": "string", "description": "User gender" },
+        "religion": { "type": "string", "description": "User religion" },
+        "language": { "type": "string", "description": "User language" },
+        "age": { "type": "number", "description": "User age" },
+        "relationshipStatus": { "type": "string", "description": "Married or not" },
+        "profession": { "type": "string", "description": "User profession" },
+        "economicClass": { "type": "string", "description": "Rich / middle / poor" },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" },
+            "lastUpdated": { "type": "string", "format": "date-time" },
+            "accuracy": { "type": "number" },
+            "heading": { "type": "number" }
+          }
+        },
+        "isOnline": { "type": "boolean" },
+        "lastSeen": { "type": "string", "format": "date-time" },
+        "mood": {
+          "type": "object",
+          "properties": {
+            "emoji": { "type": "string" },
+            "text": { "type": "string" }
+          }
+        },
+        "lastMoodUpdate": { "type": "string", "format": "date-time" },
+        "currentMood": { "type": "string", "description": "Current mood emoji" },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "views": { "type": "number" },
+            "likes": { "type": "number" },
+            "friendsCount": { "type": "number" },
+            "ratingsCount": { "type": "number" },
+            "avgPersonality": { "type": "number" },
+            "avgFriendliness": { "type": "number" },
+            "avgAttractiveness": { "type": "number" },
+            "avgTrustLevel": { "type": "number" },
+            "totalPostLikes": { "type": "number", "description": "Total likes received on posts" }
+          }
+        },
+        "business": {
+          "type": "object",
+          "properties": {
+            "shopName": { "type": "string" },
+            "category": { "type": "string" },
+            "shopPhotoURL": { "type": "string" },
+            "ownerSelfieURL": { "type": "string" },
+            "isVerified": { "type": "boolean" },
+            "isBlueTick": { "type": "boolean" },
+            "timings": {
+              "type": "object",
+              "properties": {
+                "open": { "type": "string" },
+                "close": { "type": "string" }
+              }
+            },
+            "phoneNumber": { "type": "string" },
+            "location": {
+              "type": "object",
+              "properties": {
+                "lat": { "type": "number" },
+                "lng": { "type": "number" }
+              }
+            },
+            "showShopOnMap": { "type": "boolean" },
+            "isShopOpen": { "type": "boolean" },
+            "hasPowerOutage": { "type": "boolean" },
+            "lastInteraction": { "type": "string", "format": "date-time" },
+            "rushStatus": { "type": "string", "enum": ["low", "medium", "high", "crowded"] }
+          }
+        },
+        "recentPath": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "lat": { "type": "number" },
+              "lng": { "type": "number" },
+              "timestamp": { "type": "number" }
+            }
+          }
+        }
+      },
+      "required": ["uid", "username", "email"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "A user post (TikTok style).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "username": { "type": "string" },
+        "userPhoto": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "description": { "type": "string" },
+        "vibeTag": { "type": "string" },
+        "likes": { "type": "number" },
+        "commentsCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "A comment on a post.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "username": { "type": "string" },
+        "userPhoto": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "FriendRequest": {
+      "title": "FriendRequest",
+      "description": "A request to connect between two users.",
+      "type": "object",
+      "properties": {
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "rejected"] },
+        "friendshipType": { "type": "string" },
+        "closeness": { "type": "number" },
+        "attractiveness": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A chat message between users.",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "receiverId": { "type": "string" },
+        "text": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "read": { "type": "boolean" }
+      }
+    },
+    "Rating": {
+      "title": "Rating",
+      "description": "User rating for another user.",
+      "type": "object",
+      "properties": {
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "personality": { "type": "number" },
+        "friendliness": { "type": "number" },
+        "attractiveness": { "type": "number" },
+        "trustLevel": { "type": "number" }
+      }
+    },
+    "History": {
+      "title": "History",
+      "description": "User activity history.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "type": { "type": "string", "enum": ["search", "view"] },
+        "targetId": { "type": "string" },
+        "query": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "A chat conversation between two users.",
+      "type": "object",
+      "properties": {
+        "participants": { "type": "array", "items": { "type": "string" } },
+        "lastMessage": { "type": "string" },
+        "lastMessageTimestamp": { "type": "string", "format": "date-time" },
+        "lastMessageSenderId": { "type": "string" },
+        "unreadCount": { "type": "object" }
+      }
+    },
+    "SocialAction": {
+      "title": "SocialAction",
+      "description": "A view, like, or rate action.",
+      "type": "object",
+      "properties": {
+        "fromId": { "type": "string" },
+        "toId": { "type": "string" },
+        "fromName": { "type": "string" },
+        "fromPhoto": { "type": "string" },
+        "type": { "type": "string", "enum": ["view", "like", "rate"] },
+        "ratingValues": {
+          "type": "object",
+          "properties": {
+            "personality": { "type": "number" },
+            "friendliness": { "type": "number" },
+            "attractiveness": { "type": "number" },
+            "trustLevel": { "type": "number" }
+          }
+        },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Call": {
+      "title": "Call",
+      "description": "A voice or video call signaling data.",
+      "type": "object",
+      "properties": {
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "fromName": { "type": "string" },
+        "fromPhoto": { "type": "string" },
+        "type": { "type": "string", "enum": ["offer", "answer", "candidate", "end"] },
+        "status": { "type": "string", "enum": ["ringing", "active", "ended", "missed"] },
+        "sdp": { "type": "string" },
+        "candidate": { "type": "object" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "A notification for a user.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Recipient UID" },
+        "fromId": { "type": "string", "description": "Sender UID" },
+        "fromName": { "type": "string" },
+        "fromPhoto": { "type": "string" },
+        "type": { "type": "string", "enum": ["message", "friend_request", "like", "rate"] },
+        "text": { "type": "string" },
+        "chatId": { "type": "string" },
+        "read": { "type": "boolean" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Moment": {
+      "title": "Moment",
+      "description": "A time-limited media sharing system (similar to stories).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "uid": { "type": "string" },
+        "username": { "type": "string" },
+        "userPhoto": { "type": "string" },
+        "mediaUrl": { "type": "string" },
+        "mediaType": { "type": "string", "enum": ["image", "video"] },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" },
+            "name": { "type": "string" }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "HelpSignal": {
+      "title": "HelpSignal",
+      "description": "An SOS/Help signal broadcasted to nearby users.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "username": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "text": { "type": "string" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "radius": { "type": "number" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "ShoppingList": {
+      "title": "ShoppingList",
+      "description": "A list of items a user wants to buy.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "uid": { "type": "string" },
+        "username": { "type": "string" },
+        "userPhoto": { "type": "string" },
+        "items": { "type": "array", "items": { "type": "string" } },
+        "radiusKm": { "type": "number" },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "status": { "type": "string", "enum": ["active", "completed", "cancelled"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Bid": {
+      "title": "Bid",
+      "description": "A price bid from a shop for a shopping list.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "listId": { "type": "string" },
+        "shopId": { "type": "string" },
+        "shopName": { "type": "string" },
+        "shopPhoto": { "type": "string" },
+        "totalPrice": { "type": "number" },
+        "currency": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "rejected"] }
+      }
+    },
+    "StockQuery": {
+      "title": "StockQuery",
+      "description": "A query to check if an item is in stock.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "uid": { "type": "string" },
+        "username": { "type": "string" },
+        "itemName": { "type": "string" },
+        "radiusKm": { "type": "number" },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "StockReply": {
+      "title": "StockReply",
+      "description": "A reply from a shop about item availability.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "queryId": { "type": "string" },
+        "shopId": { "type": "string" },
+        "shopName": { "type": "string" },
+        "shopPhoto": { "type": "string" },
+        "available": { "type": "boolean" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "DeliveryRequest": {
+      "title": "DeliveryRequest",
+      "description": "A request for item delivery.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "uid": { "type": "string" },
+        "username": { "type": "string" },
+        "itemName": { "type": "string" },
+        "deliveryFee": { "type": "number" },
+        "currency": { "type": "string" },
+        "radiusKm": { "type": "number" },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "status": { "type": "string", "enum": ["pending", "accepted", "completed"] },
+        "acceptedBy": { "type": "string" },
+        "acceptedByName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "FlashSale": {
+      "title": "FlashSale",
+      "description": "A time-limited discount from a shop.",
+      "type": "object",
+      "properties": {
+        "shopId": { "type": "string" },
+        "shopName": { "type": "string" },
+        "discountPercent": { "type": "number" },
+        "durationHours": { "type": "number" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "radiusKm": { "type": "number" }
+      }
+    },
+    "Destiny": {
+      "title": "Destiny",
+      "description": "A user's journey to a specific destination on the map.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "uid": { "type": "string" },
+        "username": { "type": "string" },
+        "userPhoto": { "type": "string" },
+        "startLocation": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "targetLocation": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "status": { "type": "string", "enum": ["active", "completed", "failed", "cancelled"] },
+        "visibility": { "type": "string", "enum": ["all", "mates", "custom"] },
+        "allowedUsers": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": "string", "format": "date-time" },
+        "distance": { "type": "number" }
+      }
+    },
+    "PathPoint": {
+      "title": "PathPoint",
+      "description": "A single point in a user's movement path.",
+      "type": "object",
+      "properties": {
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["lat", "lng", "timestamp"]
+    },
+    "ParentChildPath": {
+      "title": "ParentChildPath",
+      "description": "A collection of points and stops for a child's path.",
+      "type": "object",
+      "properties": {
+        "childUid": { "type": "string" },
+        "points": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "lat": { "type": "number" },
+              "lng": { "type": "number" },
+              "timestamp": { "type": "number" }
+            }
+          }
+        },
+        "stops": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "lat": { "type": "number" },
+              "lng": { "type": "number" },
+              "startTime": { "type": "number" },
+              "endTime": { "type": "number" }
+            }
+          }
+        },
+        "lastUpdated": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "DestinyConfig": {
+      "title": "DestinyConfig",
+      "description": "Configuration for a parent-set destiny for a child.",
+      "type": "object",
+      "properties": {
+        "childUid": { "type": "string" },
+        "parentUid": { "type": "string" },
+        "target": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "status": { "type": "string", "enum": ["active", "completed", "failed", "cancelled"] },
+        "details": {
+          "type": "object",
+          "properties": {
+            "timeOfDay": { "type": "string", "enum": ["day", "night"] },
+            "gender": { "type": "string", "enum": ["boy", "girl"] },
+            "preference": { "type": "string", "enum": ["rush", "quiet"] }
+          }
+        },
+        "radiusLimit": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "MapLabel": {
+      "title": "MapLabel",
+      "description": "A custom label/place added to the map by a user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "creatorId": { "type": "string" },
+        "creatorName": { "type": "string" },
+        "creatorPhoto": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "subCategory": { "type": "string" },
+        "photos": { "type": "array", "items": { "type": "string" } },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "markerIcon": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "approvedAt": { "type": "string", "format": "date-time" },
+        "hiddenBy": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{uid}": { "schema": "User", "description": "User profiles" },
+    "/users/{uid}/views/{viewId}": { "schema": "SocialAction", "description": "Profile viewers" },
+    "/users/{uid}/likes/{likeId}": { "schema": "SocialAction", "description": "Profile likers" },
+    "/users/{uid}/friends/{friendId}": { "schema": "SocialAction", "description": "Friend list" },
+    "/users/{uid}/path_points/{pointId}": { "schema": "PathPoint", "description": "User path history points" },
+    "/friendRequests/{requestId}": { "schema": "FriendRequest", "description": "Friend requests" },
+    "/conversations/{convId}": { "schema": "Conversation", "description": "Chat conversations" },
+    "/conversations/{convId}/messages/{messageId}": { "schema": "Message", "description": "Chat messages" },
+    "/ratings/{ratingId}": { "schema": "Rating", "description": "User ratings" },
+    "/history/{historyId}": { "schema": "History", "description": "User activity history" },
+    "/notifications/{notifId}": { "schema": "Notification", "description": "User notifications" },
+    "/socialActions/{actionId}": { "schema": "SocialAction", "description": "Profile views and likes" },
+    "/calls/{callId}": { "schema": "Call", "description": "Call signaling" },
+    "/posts/{postId}": { "schema": "Post", "description": "User posts" },
+    "/posts/{postId}/comments/{commentId}": { "schema": "Comment", "description": "Post comments" },
+    "/moments/{momentId}": { "schema": "Moment", "description": "User moments (stories)" },
+    "/help_signals/{signalId}": { "schema": "HelpSignal", "description": "SOS help signals" },
+    "/shopping_lists/{listId}": { "schema": "ShoppingList", "description": "User shopping lists" },
+    "/shopping_lists/{listId}/bids/{bidId}": { "schema": "Bid", "description": "Shop bids for lists" },
+    "/stock_queries/{queryId}": { "schema": "StockQuery", "description": "User stock queries" },
+    "/stock_queries/{queryId}/replies/{replyId}": { "schema": "StockReply", "description": "Shop replies to queries" },
+    "/delivery_requests/{requestId}": { "schema": "DeliveryRequest", "description": "Delivery requests" },
+    "/flash_sales/{saleId}": { "schema": "FlashSale", "description": "Active flash sales" },
+    "/destinies/{destinyId}": { "schema": "Destiny", "description": "User journeys (destinies)" },
+    "/parentChildPaths/{pathId}": { "schema": "ParentChildPath", "description": "Child path tracking data" },
+    "/destinyConfigs/{configId}": { "schema": "DestinyConfig", "description": "Parent-set destiny configurations" },
+    "/labels/{labelId}": { "schema": "MapLabel", "description": "User-added map labels" },
+    "/app_config/{configId}": { "schema": "object", "description": "Global application configuration" },
+    "/test/{docId}": { "schema": "object", "description": "Connection test collection" },
+    "/admins/{uid}": { "schema": "object", "description": "Admin users list" }
+  }
+}
