@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "source": "functions",
+    "predeploy": [
+      "npm --prefix \"$RESOURCE_DIR\" run build"
+    ]
+  },
+  "firestore": {
+    "database": "ai-studio-27324afc-24d7-4433-8ef4-eb4b409afbbc",
+    "rules": "firestore.rules"
+  }
+}

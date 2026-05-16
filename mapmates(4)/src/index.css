@@ -1,0 +1,206 @@
+@import "tailwindcss";
+
+:root {
+  --bg-main: #020617;
+  --bg-card: rgba(15, 23, 42, 0.6);
+  --bg-input: rgba(30, 41, 59, 0.5);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --nav-bg: rgba(2, 6, 23, 0.7);
+  --accent-color: #3b82f6;
+  --accent-hover: #60a5fa;
+  --neon-blue: #00f2ff;
+  --neon-purple: #bc13fe;
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-neon-blue: #00f2ff;
+  --color-neon-purple: #bc13fe;
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .neon-border {
+    border: 1px solid var(--neon-blue);
+    box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+  }
+  .neon-text {
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+  }
+  .neon-glow {
+    filter: drop-shadow(0 0 8px var(--neon-blue));
+  }
+  .neon-trail {
+    filter: drop-shadow(0 0 5px #39FF14) drop-shadow(0 0 10px #39FF14);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+@import "leaflet/dist/leaflet.css";
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: var(--bg-main);
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+.dark {
+  --bg-main: #020617;
+  --bg-card: rgba(15, 23, 42, 0.6);
+  --bg-input: rgba(30, 41, 59, 0.5);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --nav-bg: rgba(2, 6, 23, 0.7);
+  --accent-color: #3b82f6;
+  --accent-hover: #60a5fa;
+}
+
+/* Global transitions for dark mode */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Smooth marker movement - removed to prevent lag with custom JS animation */
+.leaflet-marker-icon {
+  transition: none !important;
+}
+
+/* Custom Popup Styling */
+.custom-popup .leaflet-popup-content-wrapper {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 2rem;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.custom-popup .leaflet-popup-content {
+  margin: 0;
+  width: auto !important;
+}
+
+.custom-popup .leaflet-popup-tip {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+}
+
+.custom-popup .leaflet-popup-close-button {
+  top: 12px;
+  right: 12px;
+  color: #a3a3a3;
+  font-size: 20px;
+}
+
+/* Hide scrollbar for discover overlay */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+@keyframes marker-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.marker-bounce {
+  animation: marker-bounce 2s ease-in-out infinite;
+}
+
+/* Premium Map Enhancements */
+.map-premium-visuals {
+  filter: contrast(1.05) saturate(1.1) brightness(0.95);
+  transition: filter 0.5s ease;
+}
+
+.maplibre-premium-container {
+  filter: contrast(1.1) saturate(1.2) brightness(0.9);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), filter 0.5s ease;
+}
+
+.maplibre-top-view-perspective {
+  transform: perspective(1000px) rotateX(10deg);
+}
+
+/* MapLibre Canvas Smoothing */
+.maplibregl-canvas {
+  outline: none !important;
+}
+
+/* Marker improvements for 3D view */
+.maplibre-marker {
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+  will-change: transform;
+}
+.maplibre-marker:hover {
+  transform: scale(1.15) translateY(-8px) !important;
+  z-index: 1000 !important;
+}
+
+/* Premium Control improvements */
+.map-control-glass {
+  background: rgba(2, 6, 23, 0.7);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border-radius: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: white;
+}
+
+.map-control-glass:hover {
+  background: rgba(2, 6, 23, 0.9);
+  border-color: rgba(59, 130, 246, 0.6);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  transform: translateY(-2px) scale(1.05);
+  color: #60a5fa;
+}
+
+.dark .map-control-glass {
+  background: rgba(2, 6, 23, 0.8);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.dark .map-control-glass:hover {
+  background: rgba(2, 6, 23, 0.95);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
